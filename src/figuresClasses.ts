@@ -7,29 +7,31 @@ export interface Figure {
 export class Triangle implements Figure {
   shape = 'triangle';
 
-  color: string;
+  constructor(
+    public color: string,
+    public a: number,
+    public b: number,
+    public c: number,
+  ) {
+    const invalidSides = [
+      a <= 0 ? `a = ${a}` : null,
+      b <= 0 ? `b = ${b}` : null,
+      c <= 0 ? `c = ${c}` : null,
+    ]
+      .filter(Boolean)
+      .join(', ');
 
-  a: number;
-
-  b: number;
-
-  c: number;
-
-  constructor(color: string, a: number, b: number, c: number) {
-    if (a <= 0 || b <= 0 || c <= 0) {
-      throw new Error('Side lengths must be greater than zero.');
+    if (invalidSides) {
+      throw new Error(
+        `Invalid side length(s): ${invalidSides}. Each must be greater than zero.`,
+      );
     }
 
     if (a + b <= c || a + c <= b || b + c <= a) {
       throw new Error(
-        'The sum of any two sides must be greater than the third side.',
+        `Invalid triangle: the sum of any two sides must be greater than the third side (a = ${a}, b = ${b}, c = ${c}).`,
       );
     }
-
-    this.color = color;
-    this.a = a;
-    this.b = b;
-    this.c = c;
   }
 
   getArea(): number {
@@ -43,16 +45,15 @@ export class Triangle implements Figure {
 export class Circle implements Figure {
   shape = 'circle';
 
-  color: string;
-
-  radius: number;
-
-  constructor(color: string, radius: number) {
+  constructor(
+    public color: string,
+    public radius: number,
+  ) {
     if (radius <= 0) {
-      throw new Error('Radius must be greater than zero.');
+      throw new Error(
+        `Invalid radius: radius = ${radius}. Radius must be greater than zero.`,
+      );
     }
-    this.color = color;
-    this.radius = radius;
   }
 
   getArea(): number {
@@ -65,19 +66,23 @@ export class Circle implements Figure {
 export class Rectangle implements Figure {
   shape = 'rectangle';
 
-  color: string;
+  constructor(
+    public color: string,
+    public width: number,
+    public height: number,
+  ) {
+    const invalidDimensions = [
+      width <= 0 ? `width = ${width}` : null,
+      height <= 0 ? `height = ${height}` : null,
+    ]
+      .filter(Boolean)
+      .join(', ');
 
-  width: number;
-
-  height: number;
-
-  constructor(color: string, width: number, height: number) {
-    if (width <= 0 || height <= 0) {
-      throw new Error('Width and height must be greater than zero.');
+    if (invalidDimensions) {
+      throw new Error(
+        `Invalid dimension(s): ${invalidDimensions}. Each must be greater than zero.`,
+      );
     }
-    this.color = color;
-    this.width = width;
-    this.height = height;
   }
 
   getArea(): number {
